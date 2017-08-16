@@ -3,7 +3,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { DOZN_CONFIG, IDoznConfig } from './utils';
 import { DoznService } from './dozn.service';
-import { DoznInputDirective } from './dozn-input.directive';
 import { DoznApp } from './dozn-root.component';
 
 @NgModule({
@@ -12,11 +11,9 @@ import { DoznApp } from './dozn-root.component';
   ],
   declarations: [
     DoznApp,
-    DoznInputDirective,
   ],
   exports: [
     DoznApp,
-    DoznInputDirective,
   ],
 })
 export class DoznModule {
