@@ -40,6 +40,10 @@ export class DoznApp extends IonicApp {
     renderer.listenGlobal('document', 'click', (event: UIEvent) => {
       doznService.doznEvents.next(event);
     });
+
+    renderer.listenGlobal('document', 'input', (event: UIEvent) => {
+      doznService.doznEvents.next(event);
+    });
   }
 
   ngOnInit() {
