@@ -1,9 +1,10 @@
 import { Component, Inject, ComponentFactoryResolver, ElementRef, Renderer } from '@angular/core';
-import { IonicApp, Config, Platform, App, ViewController } from 'ionic-angular';
+import { IonicApp, Config, Platform, App, ViewController, ModalController } from 'ionic-angular';
 import { AppRootToken } from 'ionic-angular/components/app/app-root';
 
 import { DoznService } from './dozn.service';
 import * as utils from './utils';
+import { DoznModal } from './modal/modal.component';
 
 @Component({
   selector: 'ion-app',
@@ -16,6 +17,7 @@ import * as utils from './utils';
     '<div class="click-block"></div>'
 })
 export class DoznApp extends IonicApp {
+
   constructor(
     @Inject(AppRootToken) _userCmp: any,
     _cfr: ComponentFactoryResolver,
@@ -25,6 +27,7 @@ export class DoznApp extends IonicApp {
     _plt: Platform,
     app: App,
     private doznService: DoznService,
+    public modalCtrl: ModalController
   ) {
     super(_userCmp, _cfr, elementRef, renderer, config, _plt, app);
 
@@ -38,15 +41,24 @@ export class DoznApp extends IonicApp {
       });
 
     renderer.listenGlobal('document', 'click', (event: UIEvent) => {
-      doznService.doznEvents.next(event);
+      if (doznService.flowSession) {
+        doznService.doznEvents.next(event);
+       }
     });
 
     renderer.listenGlobal('document', 'input', (event: UIEvent) => {
-      doznService.doznEvents.next(event);
+      if (doznService.flowSession) {
+        doznService.doznEvents.next(event);
+       }
     });
   }
 
   ngOnInit() {
     super.ngOnInit();
+    let doznModal = this.modalCtrl.create(DoznModal);
+    doznModal.onDidDismiss(() => {
+      this.doznService.currentViewName = 'DoznApp';
+    });
+    doznModal.present();
   }
 }
