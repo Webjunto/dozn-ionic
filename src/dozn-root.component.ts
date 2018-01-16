@@ -17,6 +17,7 @@ import { DoznModal } from './modal/modal.component';
     '<div class="click-block"></div>'
 })
 export class DoznApp extends IonicApp {
+  pageName;
 
   constructor(
     @Inject(AppRootToken) _userCmp: any,
@@ -33,6 +34,7 @@ export class DoznApp extends IonicApp {
 
     app.viewDidEnter
       .subscribe((viewCtrl: ViewController) => {
+        this.pageName = viewCtrl.name;
         const navbar = utils.getNavBarInstance(viewCtrl);
 
         if (navbar) {
@@ -57,7 +59,7 @@ export class DoznApp extends IonicApp {
     super.ngOnInit();
     let doznModal = this.modalCtrl.create(DoznModal);
     doznModal.onDidDismiss(() => {
-      this.doznService.currentViewName = 'DoznApp';
+      this.doznService.currentViewName = this.pageName;
     });
     doznModal.present();
   }
