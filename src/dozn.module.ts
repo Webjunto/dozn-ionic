@@ -1,7 +1,9 @@
-import { IonicModule } from 'ionic-angular';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+
+import { IonicModule } from 'ionic-angular';
+import { Device } from '@ionic-native/device';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -36,7 +38,8 @@ export class DoznModule {
     return {
       ngModule: DoznModule,
       providers: [
-        DoznService
+        DoznService,
+        Device
       ]
     };
   }

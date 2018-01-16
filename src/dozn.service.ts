@@ -1,6 +1,8 @@
 import { Http } from '@angular/http';
-import { App, ViewController, Platform } from 'ionic-angular';
 import { Injectable } from '@angular/core';
+
+import { App, ViewController, Platform } from 'ionic-angular';
+import { Device } from '@ionic-native/device';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -24,7 +26,8 @@ export class DoznService {
     public http: Http,
     public app: App,
     public platform: Platform,
-    private _af: AngularFirestore
+    private _af: AngularFirestore,
+    private device: Device
   ) {
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
@@ -43,8 +46,8 @@ export class DoznService {
 
   startSession(code, feature, flow) {
     this.session = {
-      device: 'Chrome 63',
-      projectId: project,
+      device: this.getDevice(),
+      projectId : project,
       tester: code,
       appVersion,
       featureId: feature,
@@ -57,6 +60,15 @@ export class DoznService {
     this._af.collection('sessions').add(this.session).then(res => {
       this.flowSession = res.id;
     });
+  }
+
+  getDevice() {
+    const cordova = this.device.cordova;
+    if(cordova) {
+      return this.device.model + " " + this.device.version;
+    } else {
+      return this.getBrowserInfo();
+    }
   }
 
   private prepareEvtData(event: any) {
@@ -112,5 +124,25 @@ export class DoznService {
     }
 
     return doznEvent;
+  }
+
+  private getBrowserInfo() {
+    const userAgent = navigator.userAgent;
+    let tem, M = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if (/trident/i.test(M[1])) {
+        tem =  /\brv[ :]+(\d+)/g.exec(userAgent) || [];
+        return 'IE ' + (tem[1] || '');
+    }
+    if (M[1] === 'Chrome') {
+        tem = userAgent.match(/\b(OPR|Edge)\/(\d+)/);
+        if (tem != null) {
+          return tem.slice(1).join(' ').replace('OPR', 'Opera');
+        }
+    }
+    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    if ((tem = userAgent.match(/version\/(\d+)/i)) != null) {
+      M.splice(1, 1, tem[1]);
+    }
+    return M.join(' ');
   }
 }
