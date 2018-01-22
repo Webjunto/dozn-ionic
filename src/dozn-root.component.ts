@@ -1,10 +1,9 @@
 import { Component, Inject, ComponentFactoryResolver, ElementRef, Renderer } from '@angular/core';
 import { IonicApp, Config, Platform, App, ViewController, ModalController } from 'ionic-angular';
 import { AppRootToken } from 'ionic-angular/components/app/app-root';
-
 import { DoznService } from './dozn.service';
+import { DoznModalComponent } from './modal/modal.component';
 import * as utils from './utils';
-import { DoznModal } from './modal/modal.component';
 
 @Component({
   selector: 'ion-app',
@@ -17,7 +16,7 @@ import { DoznModal } from './modal/modal.component';
     '<div class="click-block"></div>'
 })
 export class DoznApp extends IonicApp {
-  pageName;
+  pages = [];
 
   constructor(
     @Inject(AppRootToken) _userCmp: any,
@@ -34,22 +33,23 @@ export class DoznApp extends IonicApp {
 
     app.viewDidEnter
       .subscribe((viewCtrl: ViewController) => {
-        this.pageName = viewCtrl.name;
+        if (!doznService.sessionId) {
+          this.pages.push(viewCtrl.name);
+        }
         const navbar = utils.getNavBarInstance(viewCtrl);
-
         if (navbar) {
           utils.decorateNavbarBackButtonClick(navbar, doznService);
         }
       });
 
     renderer.listenGlobal('document', 'click', (event: UIEvent) => {
-      if (doznService.flowSession) {
+      if (doznService.sessionId) {
         doznService.doznEvents.next(event);
        }
     });
 
     renderer.listenGlobal('document', 'input', (event: UIEvent) => {
-      if (doznService.flowSession) {
+      if (doznService.sessionId) {
         doznService.doznEvents.next(event);
        }
     });
@@ -57,9 +57,9 @@ export class DoznApp extends IonicApp {
 
   ngOnInit() {
     super.ngOnInit();
-    let doznModal = this.modalCtrl.create(DoznModal);
+    let doznModal = this.modalCtrl.create(DoznModalComponent);
     doznModal.onDidDismiss(() => {
-      this.doznService.currentViewName = this.pageName;
+      this.doznService.currentViewName = this.pages[this.pages.length - 2];
     });
     doznModal.present();
   }
