@@ -7,6 +7,7 @@ import { DoznService } from '../dozn.service';
   templateUrl: 'modal.component.html'
 })
 export class DoznModalComponent {
+  project;
   data = {
     userProfiles: '',
     features: '',
@@ -16,7 +17,9 @@ export class DoznModalComponent {
   constructor(
     private _viewCtrl: ViewController,
     private _dozn: DoznService
-  ) {}
+  ) {
+    this.project = this._dozn.projectName;
+  }
 
   onSelect(event) {
     this.data[event.type] = event.item.id;

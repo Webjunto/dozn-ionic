@@ -3,13 +3,11 @@
 
   <input #myInput="ngModel" [(ngModel)]="name" type="text" placeholder="{{placeholder}}" class="input">
 
-  <div *ngIf="name.length > 0 && itemsCount > 0">
-      <div *ngFor="let item of items | async" (click)="selectItem(item)">
-          <p>{{item?.name}}</p>
-      </div>
+  <div *ngFor="let item of items | async" (click)="selectItem(item)">
+      <p>{{item?.name}}</p>
   </div>
 
-  <div *ngIf="name.length > 0 && itemsCount === 0" (click)="onCreate(name)">
+  <div *ngIf="name.length > 0 && !existItems" (click)="onCreate(name)">
       <p>Create {{ name }} {{ type}}</p>
   </div>
 </div>

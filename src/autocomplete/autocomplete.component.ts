@@ -12,6 +12,7 @@ export class AutocompleteComponent implements OnInit {
   @ViewChild('myInput') searchInput: NgModel;
   @Input('label') label: string;
   @Input('type') type: string;
+  @Input('project') project: string;
   @Output() autocompleteSelected: EventEmitter<{}> = new EventEmitter<{}>();
   @Output() create: EventEmitter<{}> = new EventEmitter<{}>();
 
@@ -19,14 +20,14 @@ export class AutocompleteComponent implements OnInit {
   name = '';
   placeholder = '';
   items;
-  itemsCount = true;
+  existItems = true;
 
   constructor(private _af: AngularFirestore) {
   }
 
   ngOnInit() {
     this.placeholder = 'What ' + this.type + ' do you want?';
-    this.snapshot$ = this._af.collection(this.type)
+    this.snapshot$ = this._af.collection(this.type, ref => ref.where('projectId', '==', this.project))
     .snapshotChanges()
     .map(res => {
       return res.map(a => {
@@ -39,8 +40,9 @@ export class AutocompleteComponent implements OnInit {
     this.items = this.searchInput.valueChanges
     .combineLatest(this.snapshot$)
     .map(([searchInput, dataArr]) => {
+      if (!searchInput) return [];
       const filteredArr = dataArr.filter(item => item.name.startsWith(searchInput));
-      this.itemsCount = filteredArr.length;
+      this.existItems = filteredArr.length > 0 ? true : false;
       return filteredArr;
     });
   }
@@ -50,6 +52,8 @@ export class AutocompleteComponent implements OnInit {
   }
 
   selectItem(item) {
+    this.name = item.name;
+    this.existItems = false;
     this.autocompleteSelected.emit({item, type: this.type});
   }
 }

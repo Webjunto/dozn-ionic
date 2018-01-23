@@ -18,6 +18,7 @@ export class DoznService {
   public sessionId: string;
   public doznEvents = new Subject();
   public appVersion: string;
+  public projectName;
   private session;
   private apiKey;
 
@@ -31,6 +32,7 @@ export class DoznService {
   ) {
 
     this.apiKey = config.apiKey;
+    this.projectName = project;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
