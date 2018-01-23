@@ -25,9 +25,19 @@ export class AutocompleteComponent implements OnInit {
   constructor(private _af: AngularFirestore) {
   }
 
+  getReference(ref) {
+    if (this.type === 'userProfiles') {
+      return ref;
+    } else if (this.type === 'features'){
+      return ref.where('projectId', '==', this.project);
+    } else {
+      return ref.where('projectId', '==', this.project);
+    }
+  }
+
   ngOnInit() {
     this.placeholder = 'What ' + this.type + ' do you want?';
-    this.snapshot$ = this._af.collection(this.type, ref => ref.where('projectId', '==', this.project))
+    this.snapshot$ = this._af.collection(this.type, ref => this.getReference(ref))
     .snapshotChanges()
     .map(res => {
       return res.map(a => {

@@ -37,6 +37,7 @@ export class DoznModalComponent {
 
   onSubmit() {
     if (this.data.userProfiles && this.data.features && this.data.flows) {
+      this._dozn.startSession(this.data.userProfiles, this.data.features,  this.data.flows);
       this._viewCtrl.dismiss();
     }
   }
