@@ -1,0 +1,13 @@
+<ion-content>
+  <h1>Welcome to</h1>
+  <h2>Dozn</h2>
+  <h4>Intro text</h4>
+  <form>
+    <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT USER" type="userProfiles"></auto-complete>
+    <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT FEATURE" type="features"></auto-complete>
+    <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT FLOW" type="flows"></auto-complete>
+    <div class="submit-button">
+      <button type="submit" (click)="onSubmit()">Begin Session</button>
+    </div>
+  </form>
+</ion-content>

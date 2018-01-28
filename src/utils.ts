@@ -3,7 +3,7 @@ import { ViewController, Navbar } from 'ionic-angular';
 import { DoznService } from './dozn.service';
 
 export interface IDoznConfig {
-  projectKey: string;
+  apiKey: string;
 }
 
 export let DOZN_CONFIG = new InjectionToken<IDoznConfig>('dozn.config');
