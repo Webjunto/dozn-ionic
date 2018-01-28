@@ -33,4 +33,4 @@ This allows us to present your tests to you in a way you'll understand, instead 
 
 Read our Privacy Policy and Terms of service on https://dozn.io and you'll find that it's a very user protective policy!
 
-
+**IMPORTANT**:  Remember, Dozn is for DEVELOPMENT BUILDS ONLY.  Dozn captures your tester data for testing purposes. Do NOT under any circumstances use Dozn for production builds.
