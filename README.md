@@ -29,6 +29,17 @@ This allows us to present your tests to you in a way you'll understand, instead 
   * ```bootstrap:[DoznApp]```
 * Build/Run your app, and watch the your app populate on Dozn!
 
+## Steps to publish
+
+* First build the plugin:
+  * `npm run build`
+
+* Once its builded move to dist folder:
+  * `cd dist`
+
+* And then publish it to NPM:
+  * `npm publish`
+
 ## Disclaimers
 
 Read our Privacy Policy and Terms of service on https://dozn.io and you'll find that it's a very user protective policy!
