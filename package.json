@@ -1,12 +1,12 @@
 {
   "name": "@webjunto/dozn-ionic",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Dozn is a tool for automatically generating E2E tests for your ionic application",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "types": "dist/index.d.ts",
+  "main": "src/index.js",
+  "typings": "src/index.d.ts",
+  "types": "src/index.d.ts",
   "scripts": {
-    "build": "rm -rf aot dist && ngc",
+    "build": "rm -rf aot dist && ngc && copyfiles package.json dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -45,6 +45,7 @@
     "firebase": "^4.8.1"
   },
   "devDependencies": {
+    "copyfiles": "^1.2.0",
     "typescript": "~2.4.2"
   }
 }
