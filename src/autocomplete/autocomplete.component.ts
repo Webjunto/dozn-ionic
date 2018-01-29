@@ -17,7 +17,30 @@ import 'rxjs/add/operator/combineLatest';
         <p>Create {{ name }} {{ type}}</p>
     </div>
   </div>
-  `
+  `,
+  styles: [
+    `label {
+      display: block;
+      font-size: 14px;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }`,
+    `input {
+      border: none;
+      border-radius: 3px;
+      color: #fff;
+      font-size: 14px;
+      background-color: #934db6;
+      padding: 8.5px;
+      width: 100%;
+
+      &::-webkit-input-placeholder { color: white; opacity: 0.6; }
+      &::-moz-placeholder { color: white; opacity: 0.6; }
+      &:focus::-webkit-input-placeholder { color:transparent; }
+      &:focus::-moz-placeholder { color:transparent; }
+    }`
+  ]
+
 })
 export class AutocompleteComponent implements OnInit {
   @ViewChild('myInput') searchInput: NgModel;
