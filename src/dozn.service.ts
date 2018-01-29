@@ -9,9 +9,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
-declare var require: any;
-const { version: appVersion, name: project } = require('../../../package.json');
-
 @Injectable()
 export class DoznService {
   public currentViewName: string;
@@ -32,7 +29,8 @@ export class DoznService {
   ) {
 
     this.apiKey = config.apiKey;
-    this.projectName = project;
+    this.projectName = config.projectName;
+    this.appVersion = config.version;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
@@ -52,14 +50,14 @@ export class DoznService {
   createFeature(name) {
     this._af.collection('features').add({
       name,
-      projectId: project
+      projectId: this.projectName
     });
   }
 
   createFlow(name, featureId) {
     this._af.collection('flows').add({
       name,
-      projectId: project,
+      projectId: this.projectName,
       featureId,
       testDescription: ''
     });
@@ -69,9 +67,9 @@ export class DoznService {
     this.session = {
       apiKey: this.apiKey,
       device: this.getDevice(),
-      projectId : project,
+      projectId : this.projectName,
       tester: code,
-      appVersion,
+      appVersion: this.appVersion,
       featureId: feature,
       flowId: flow,
       status: 0,

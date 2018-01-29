@@ -6,7 +6,18 @@ import 'rxjs/add/operator/combineLatest';
 
 @Component({
   selector: 'auto-complete',
-  templateUrl: './autocomplete.component.html'
+  template: `
+  <div>
+    <label>{{label}}</label>
+    <input #myInput="ngModel" [(ngModel)]="name" type="text" placeholder="{{placeholder}}" class="input">
+    <div *ngFor="let item of items | async" (click)="selectItem(item)">
+        <p>{{item?.name}}</p>
+    </div>
+    <div *ngIf="name.length > 0 && !existItems" (click)="onCreate(name)">
+        <p>Create {{ name }} {{ type}}</p>
+    </div>
+  </div>
+  `
 })
 export class AutocompleteComponent implements OnInit {
   @ViewChild('myInput') searchInput: NgModel;

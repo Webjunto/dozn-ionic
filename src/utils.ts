@@ -4,6 +4,8 @@ import { DoznService } from './dozn.service';
 
 export interface IDoznConfig {
   apiKey: string;
+  projectName: string;
+  version: string;
 }
 
 export let DOZN_CONFIG = new InjectionToken<IDoznConfig>('dozn.config');

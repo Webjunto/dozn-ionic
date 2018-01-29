@@ -1,6 +1,6 @@
 {
   "name": "@webjunto/dozn-ionic",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "description": "Dozn is a tool for automatically generating E2E tests for your ionic application",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -8,6 +8,10 @@
   "scripts": {
     "build": "rm -rf aot dist && ngc",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Webjunto/dozn-ionic.git"
   },
   "keywords": [
     "angular",
@@ -18,6 +22,10 @@
   ],
   "author": "Webjunto, LLC.",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Webjunto/dozn-ionic/issues"
+  },
+  "homepage": "https://github.com/Webjunto/dozn-ionic#readme",
   "dependencies": {
     "@angular/common": "5.0.0",
     "@angular/compiler": "5.0.0",

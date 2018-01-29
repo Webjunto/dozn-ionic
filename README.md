@@ -22,9 +22,9 @@ This allows us to present your tests to you in a way you'll understand, instead 
 * In your app, 
   * ```npm install @webjunto/dozn-ionic --save-dev```
 * In your app.module.ts, 
-  * ```import { DoznModule, DoznApp } from '@dozn/index';```
+  * ```import { DoznModule, DoznApp } from '@webjunto/dozn-ionic';```
 * Under "Imports", declare Dozn Module with your API Key 
-  * ```DoznModule.forRoot(apiKey: 'MYAPIKEY')```
+  * ```DoznModule.forRoot({apiKey: 'MYAPIKEY', projectName: 'MYAPP', version:'0.0.1'})```
 * Bootstrap your app with Dozn 
   * ```bootstrap:[DoznApp]```
 * Build/Run your app, and watch the your app populate on Dozn!
