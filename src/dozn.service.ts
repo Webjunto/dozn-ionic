@@ -20,7 +20,7 @@ export class DoznService {
   public appVersion: string;
   public projectName;
   private session;
-  private apiKey;
+  public apiKey;
 
   constructor(
     public http: Http,
@@ -52,14 +52,14 @@ export class DoznService {
   createFeature(name) {
     this._af.collection('features').add({
       name,
-      projectId: project
+      projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
     this._af.collection('flows').add({
       name,
-      projectId: project,
+      projectId: this.apiKey,
       featureId,
       testDescription: ''
     });
@@ -69,7 +69,7 @@ export class DoznService {
     this.session = {
       apiKey: this.apiKey,
       device: this.getDevice(),
-      projectId : project,
+      projectId : this.apiKey,
       tester: code,
       appVersion,
       featureId: feature,

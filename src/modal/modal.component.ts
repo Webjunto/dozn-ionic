@@ -10,9 +10,9 @@ import { DoznService } from '../dozn.service';
     <h2>Dozn</h2>
     <h4>Intro text</h4>
     <form>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT USER" type="userProfiles"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT FEATURE" type="features"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="project" label="SELECT FLOW" type="flows"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT USER" type="userProfiles"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FEATURE" type="features"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FLOW" type="flows"></auto-complete>
       <div class="submit-button">
         <button type="submit" (click)="onSubmit()">Begin Session</button>
       </div>
@@ -59,6 +59,7 @@ import { DoznService } from '../dozn.service';
 })
 export class DoznModalComponent {
   project;
+  projectId;
   data = {
     userProfiles: '',
     features: '',
@@ -70,6 +71,7 @@ export class DoznModalComponent {
     private _dozn: DoznService
   ) {
     this.project = this._dozn.projectName;
+    this.projectId = this._dozn.apiKey;
   }
 
   onSelect(event) {
@@ -78,9 +80,9 @@ export class DoznModalComponent {
 
   onCreate(event) {
     if (event.type === 'features') {
-      this._dozn.createFeature(name);
+      this._dozn.createFeature(event.name);
     } else if (event.type === 'flows') {
-      this._dozn.createFlow(name, this.data.features);
+      this._dozn.createFlow(event.name, this.data.features);
     } else {
       return;
     }
