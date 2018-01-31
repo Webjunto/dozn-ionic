@@ -10,9 +10,9 @@ import { DoznService } from '../dozn.service';
     <h2>Dozn</h2>
     <h4>Intro text</h4>
     <form>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT USER" type="companyUsers"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FEATURE" type="features"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FLOW" type="flows"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT USER" type="companyUsers"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FEATURE" type="features"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FLOW" type="flows"></auto-complete>
       <div class="submit-button">
         <button type="submit" (click)="onSubmit()">Begin Session</button>
       </div>
@@ -58,7 +58,6 @@ import { DoznService } from '../dozn.service';
   ]
 })
 export class DoznModalComponent {
-  projectId: string;
   data = {
     userProfiles: '',
     features: '',
@@ -68,9 +67,7 @@ export class DoznModalComponent {
   constructor(
     private _viewCtrl: ViewController,
     private _dozn: DoznService
-  ) {
-    this.projectId = this._dozn.apiKey;
-  }
+  ) { }
 
   onSelect(event) {
     this.data[event.type] = event.item.id;

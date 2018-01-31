@@ -2,9 +2,9 @@ import { InjectionToken } from '@angular/core';
 import { ViewController, Navbar } from 'ionic-angular';
 import { DoznService } from './dozn.service';
 
-export const GET_COMPANY_USERS = '';
-export const GET_FEATURES = '';
-export const GET_FLOWS = '';
+export const GET_COMPANY_USERS = 'https://us-central1-ioniczen-7709c.cloudfunctions.net/getUsers?apikey=';
+export const GET_FEATURES = 'https://us-central1-ioniczen-7709c.cloudfunctions.net/getFlows?apikey=';
+export const GET_FLOWS = 'https://us-central1-ioniczen-7709c.cloudfunctions.net/getFeatures?apikey=';
 export const POST_SESSION = '';
 export const POST_ACTION = '';
 export const POST_FEATURE = '';
