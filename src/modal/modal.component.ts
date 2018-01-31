@@ -10,7 +10,7 @@ import { DoznService } from '../dozn.service';
     <h2>Dozn</h2>
     <h4>Intro text</h4>
     <form>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT USER" type="userProfiles"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT USER" type="companyUsers"></auto-complete>
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FEATURE" type="features"></auto-complete>
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" [project]="projectId" label="SELECT FLOW" type="flows"></auto-complete>
       <div class="submit-button">
@@ -58,8 +58,7 @@ import { DoznService } from '../dozn.service';
   ]
 })
 export class DoznModalComponent {
-  project;
-  projectId;
+  projectId: string;
   data = {
     userProfiles: '',
     features: '',
@@ -70,7 +69,6 @@ export class DoznModalComponent {
     private _viewCtrl: ViewController,
     private _dozn: DoznService
   ) {
-    this.project = this._dozn.projectName;
     this.projectId = this._dozn.apiKey;
   }
 
@@ -90,7 +88,7 @@ export class DoznModalComponent {
 
   onSubmit() {
     if (this.data.userProfiles && this.data.features && this.data.flows) {
-      this._dozn.startSession(this.data.userProfiles, this.data.features,  this.data.flows);
+      this._dozn.startSession(this.data.userProfiles, this.data.features, this.data.flows);
       this._viewCtrl.dismiss();
     }
   }

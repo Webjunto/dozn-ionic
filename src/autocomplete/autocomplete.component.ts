@@ -1,8 +1,11 @@
 import { Component, OnInit, Input,  Output, EventEmitter, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { Http } from '@angular/http';
+
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/combineLatest';
+
+ import {GET_COMPANY_USERS, GET_FEATURES,  GET_FLOWS} from '../utils';
 
 @Component({
   selector: 'auto-complete',
@@ -56,34 +59,26 @@ export class AutocompleteComponent implements OnInit {
   items;
   existItems = true;
 
-  constructor(private _af: AngularFirestore) {
+  constructor(private http: Http) {
   }
 
-  getReference(ref) {
-    if (this.type === 'userProfiles') {
-      return ref;
+  getUrl() {
+    if (this.type === 'companyUsers') {
+      return GET_COMPANY_USERS;
     } else if (this.type === 'features'){
-      return ref.where('projectId', '==', this.project);
+      return GET_FEATURES;
     } else {
-      return ref.where('projectId', '==', this.project);
+      return GET_FLOWS;
     }
   }
 
   ngOnInit() {
     this.placeholder = 'What ' + this.type + ' do you want?';
-    this.snapshot$ = this._af.collection(this.type, ref => this.getReference(ref))
-    .snapshotChanges()
-    .map(res => {
-      return res.map(a => {
-        const data = a.payload.doc.data();
-        data.id = a.payload.doc.id;
-        return data;
-      });
-    });
+    this.snapshot$ = this.http.get(this.getUrl());
 
     this.items = this.searchInput.valueChanges
     .combineLatest(this.snapshot$)
-    .map(([searchInput, dataArr]) => {
+    .subscribe(([searchInput, dataArr]) => {
       if (!searchInput) return [];
       const filteredArr = dataArr.filter(item => item.name.startsWith(searchInput));
       this.existItems = filteredArr.length > 0 ? true : false;

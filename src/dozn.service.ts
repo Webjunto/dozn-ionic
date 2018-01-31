@@ -1,38 +1,36 @@
-import { Http } from '@angular/http';
 import { Injectable, Inject } from '@angular/core';
-import { App, ViewController, Platform } from 'ionic-angular';
+import { Http } from '@angular/http';
+
+import { App, ViewController } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
-import { AngularFirestore, docChanges } from 'angularfire2/firestore';
-import { DOZN_CONFIG, IDoznConfig } from './utils';
+
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
+import { DOZN_CONFIG, IDoznConfig, POST_SESSION, POST_ACTION, POST_FEATURE, POST_FLOW } from './utils';
+
 declare var require: any;
-const { version: appVersion, name: project } = require('../../../../package.json');
+const { version: appVersion } = require('../../../../package.json');
 
 @Injectable()
 export class DoznService {
+  private session;
+
+  public doznEvents = new Subject();
   public currentViewName: string;
   public sessionId: string;
-  public doznEvents = new Subject();
   public appVersion: string;
-  public projectName;
-  private session;
-  public apiKey;
+  public apiKey: string;
 
   constructor(
     public http: Http,
     public app: App,
-    public platform: Platform,
-    private _af: AngularFirestore,
     private device: Device,
     @Inject(DOZN_CONFIG) config: IDoznConfig
   ) {
 
     this.apiKey = config.apiKey;
-    this.projectName = project;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
@@ -42,7 +40,7 @@ export class DoznService {
     .distinctUntilChanged()
     .switchMap((event: any) => {
       const payload: any = this.prepareEvtData(event);
-      return this._af.collection('actions').add(payload);
+      return this.http.post(POST_ACTION, payload);
     })
     .subscribe(data => {
       console.log('saved event:', data);
@@ -50,14 +48,14 @@ export class DoznService {
   }
 
   createFeature(name) {
-    this._af.collection('features').add({
+    this.http.post(POST_FEATURE, {
       name,
       projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
-    this._af.collection('flows').add({
+    this.http.post(POST_FLOW, {
       name,
       projectId: this.apiKey,
       featureId,
@@ -79,7 +77,7 @@ export class DoznService {
       updatedAt: new Date()
     };
 
-    this._af.collection('sessions').add(this.session).then(res => {
+    this.http.post(POST_SESSION, this.session).toPromise().then((res: any) => {
       this.sessionId = res.id;
     });
   }
