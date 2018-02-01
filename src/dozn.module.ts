@@ -11,6 +11,8 @@ import { DoznModalComponent } from './modal/modal.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { DOZN_CONFIG, IDoznConfig } from './utils';
 
+import { FilterPipe } from './autocomplete/filter-pipe';
+
 @NgModule({
   imports: [
     IonicModule,
@@ -20,7 +22,8 @@ import { DOZN_CONFIG, IDoznConfig } from './utils';
   declarations: [
     DoznApp,
     DoznModalComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    FilterPipe
   ],
   exports: [
     DoznApp,

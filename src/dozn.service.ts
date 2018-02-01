@@ -1,10 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 
 import { App, ViewController } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
 
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
@@ -37,25 +38,23 @@ export class DoznService {
     });
 
     this.doznEvents.asObservable()
-    .distinctUntilChanged()
-    .switchMap((event: any) => {
+    .subscribe(event => {
       const payload: any = this.prepareEvtData(event);
-      return this.http.post(POST_ACTION, payload);
-    })
-    .subscribe(data => {
-      console.log('saved event:', data);
+      this.http.post(POST_ACTION, payload).subscribe(data => {
+        console.log('saved event:', data);
+      });
     });
   }
 
   createFeature(name) {
-    this.http.post(POST_FEATURE, {
+    return this.http.post(POST_FEATURE, {
       name,
       projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
-    this.http.post(POST_FLOW, {
+    return this.http.post(POST_FLOW, {
       name,
       projectId: this.apiKey,
       featureId,
@@ -77,8 +76,8 @@ export class DoznService {
       updatedAt: new Date()
     };
 
-    this.http.post(POST_SESSION, this.session).toPromise().then((res: any) => {
-      this.sessionId = res.id;
+    this.http.post(POST_SESSION, this.session).subscribe((id: any) => {
+      this.sessionId = id;
     });
   }
 

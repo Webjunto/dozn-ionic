@@ -10,9 +10,9 @@ import { DoznService } from '../dozn.service';
     <h2>Dozn</h2>
     <h4>Intro text</h4>
     <form>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT USER" type="companyUsers"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FEATURE" type="features"></auto-complete>
-      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FLOW" type="flows"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT USER" type="user"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FEATURE" type="feature"></auto-complete>
+      <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FLOW" type="flow"></auto-complete>
       <div class="submit-button">
         <button type="submit" (click)="onSubmit()">Begin Session</button>
       </div>
@@ -59,9 +59,9 @@ import { DoznService } from '../dozn.service';
 })
 export class DoznModalComponent {
   data = {
-    userProfiles: '',
-    features: '',
-    flows: ''
+    user: '',
+    feature: '',
+    flow: ''
   };
 
   constructor(
@@ -74,18 +74,24 @@ export class DoznModalComponent {
   }
 
   onCreate(event) {
-    if (event.type === 'features') {
-      this._dozn.createFeature(event.name);
-    } else if (event.type === 'flows') {
-      this._dozn.createFlow(event.name, this.data.features);
+    if (event.type === 'feature') {
+      this._dozn.createFeature(event.name)
+      .subscribe(id => {
+        this.data[event.type] = id;
+      });
+    } else if (event.type === 'flow') {
+      this._dozn.createFlow(event.name, this.data.feature)
+      .subscribe(id => {
+        this.data[event.type] = id;
+      });
     } else {
       return;
     }
   }
 
   onSubmit() {
-    if (this.data.userProfiles && this.data.features && this.data.flows) {
-      this._dozn.startSession(this.data.userProfiles, this.data.features, this.data.flows);
+    if (this.data.user && this.data.feature && this.data.flow) {
+      this._dozn.startSession(this.data.user, this.data.feature, this.data.flow);
       this._viewCtrl.dismiss();
     }
   }
