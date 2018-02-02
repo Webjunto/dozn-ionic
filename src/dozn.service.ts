@@ -1,63 +1,60 @@
-import { Http } from '@angular/http';
 import { Injectable, Inject } from '@angular/core';
-import { App, ViewController, Platform } from 'ionic-angular';
+import { Http, Response } from '@angular/http';
+
+import { App, ViewController } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
-import { AngularFirestore, docChanges } from 'angularfire2/firestore';
-import { DOZN_CONFIG, IDoznConfig } from './utils';
+
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
+import { DOZN_CONFIG, IDoznConfig, POST_SESSION, POST_ACTION, POST_FEATURE, POST_FLOW } from './utils';
+
 declare var require: any;
-const { version: appVersion, name: project } = require('../../../../package.json');
+const { version: appVersion } = require('../../../../package.json');
 
 @Injectable()
 export class DoznService {
+  private session;
+
+  public doznEvents = new Subject();
   public currentViewName: string;
   public sessionId: string;
-  public doznEvents = new Subject();
   public appVersion: string;
-  public projectName;
-  private session;
-  public apiKey;
+  public apiKey: string;
 
   constructor(
     public http: Http,
     public app: App,
-    public platform: Platform,
-    private _af: AngularFirestore,
     private device: Device,
     @Inject(DOZN_CONFIG) config: IDoznConfig
   ) {
 
     this.apiKey = config.apiKey;
-    this.projectName = project;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
     });
 
     this.doznEvents.asObservable()
-    .distinctUntilChanged()
-    .switchMap((event: any) => {
+    .subscribe(event => {
       const payload: any = this.prepareEvtData(event);
-      return this._af.collection('actions').add(payload);
-    })
-    .subscribe(data => {
-      console.log('saved event:', data);
+      this.http.post(POST_ACTION, payload).subscribe(data => {
+        console.log('saved event:', data);
+      });
     });
   }
 
   createFeature(name) {
-    this._af.collection('features').add({
+    return this.http.post(POST_FEATURE, {
       name,
       projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
-    this._af.collection('flows').add({
+    return this.http.post(POST_FLOW, {
       name,
       projectId: this.apiKey,
       featureId,
@@ -65,7 +62,7 @@ export class DoznService {
     });
   }
 
-  startSession(code, feature, flow) {
+  async startSession(code, feature, flow) {
     this.session = {
       apiKey: this.apiKey,
       device: this.getDevice(),
@@ -79,9 +76,8 @@ export class DoznService {
       updatedAt: new Date()
     };
 
-    this._af.collection('sessions').add(this.session).then(res => {
-      this.sessionId = res.id;
-    });
+    const session = await this.http.post(POST_SESSION, this.session).toPromise();
+    this.sessionId = session.text();
   }
 
   getDevice() {

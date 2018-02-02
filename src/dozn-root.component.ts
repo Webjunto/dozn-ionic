@@ -1,6 +1,8 @@
 import { Component, Inject, ComponentFactoryResolver, ElementRef, Renderer } from '@angular/core';
+
 import { IonicApp, Config, Platform, App, ViewController, ModalController } from 'ionic-angular';
 import { AppRootToken } from 'ionic-angular/components/app/app-root';
+
 import { DoznService } from './dozn.service';
 import { DoznModalComponent } from './modal/modal.component';
 import * as utils from './utils';

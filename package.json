@@ -1,6 +1,6 @@
 {
   "name": "@webjunto/dozn-ionic",
-  "version": "1.0.12",
+  "version": "1.1.1",
   "description": "Dozn is a tool for automatically generating E2E tests for your ionic application",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
@@ -40,9 +40,7 @@
     "ionic-angular": "3.9.2",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18",
-    "angularfire2": "^5.0.0-rc.0",
-    "firebase": "^4.8.1"
+    "zone.js": "0.8.18"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",

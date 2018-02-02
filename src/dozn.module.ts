@@ -1,29 +1,29 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
+
 import { DoznService } from './dozn.service';
 import { DoznApp } from './dozn-root.component';
 import { DoznModalComponent } from './modal/modal.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { DOZN_CONFIG, IDoznConfig } from './utils';
-import { environment } from './environment';
+
+import { FilterPipe } from './autocomplete/filter-pipe';
 
 @NgModule({
   imports: [
     IonicModule,
     HttpModule,
-    FormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    FormsModule
   ],
   declarations: [
     DoznApp,
     DoznModalComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    FilterPipe
   ],
   exports: [
     DoznApp,
