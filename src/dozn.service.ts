@@ -9,7 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
-import { DOZN_CONFIG, IDoznConfig, POST_SESSION, POST_ACTION, POST_FEATURE, POST_FLOW } from './utils';
+import { DOZN_CONFIG, IDoznConfig } from './utils';
+import { environment } from './environment';
 
 declare var require: any;
 const { version: appVersion } = require('../../../../package.json');
@@ -40,21 +41,21 @@ export class DoznService {
     this.doznEvents.asObservable()
     .subscribe(event => {
       const payload: any = this.prepareEvtData(event);
-      this.http.post(POST_ACTION, payload).subscribe(data => {
+      this.http.post(environment.firebase.POST_ACTION, payload).subscribe(data => {
         console.log('saved event:', data);
       });
     });
   }
 
   createFeature(name) {
-    return this.http.post(POST_FEATURE, {
+    return this.http.post(environment.firebase.POST_FEATURE, {
       name,
       projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
-    return this.http.post(POST_FLOW, {
+    return this.http.post(environment.firebase.POST_FLOW, {
       name,
       projectId: this.apiKey,
       featureId,
@@ -76,7 +77,7 @@ export class DoznService {
       updatedAt: new Date()
     };
 
-    const session = await this.http.post(POST_SESSION, this.session).toPromise();
+    const session = await this.http.post(environment.firebase.POST_SESSION, this.session).toPromise();
     this.sessionId = session.text();
   }
 
