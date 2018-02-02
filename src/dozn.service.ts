@@ -10,7 +10,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
 import { DOZN_CONFIG, IDoznConfig } from './utils';
-import { environment } from './environment';
+import { environment } from './environments/environment';
 
 declare var require: any;
 const { version: appVersion } = require('../../../../package.json');

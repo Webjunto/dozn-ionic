@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { DoznService } from '../dozn.service';
-import { environment } from '../environment';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'auto-complete',
