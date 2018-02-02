@@ -1,6 +1,6 @@
 {
   "name": "@webjunto/dozn-ionic",
-  "version": "1.0.12",
+  "version": "1.1.1",
   "description": "Dozn is a tool for automatically generating E2E tests for your ionic application",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
