@@ -13,7 +13,7 @@ import { DoznService } from '../dozn.service';
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FEATURE" type="feature"></auto-complete>
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FLOW" type="flow"></auto-complete>
       <div class="submit-button">
-        <button type="submit" (click)="onSubmit()">Begin Session</button>
+        <button type="submit" [disabled]="isDisabledBeginSession()" (click)="onSubmit()">Begin Session</button>
       </div>
     </form>
   </ion-content>
@@ -81,6 +81,14 @@ export class DoznModalComponent {
       this.data[event.type] = flow.text();
     } else {
       return;
+    }
+  }
+
+  isDisabledBeginSession() {
+    if(this.data.feature === '' || this.data.flow === '' || this.data.user === '') {
+      return true;
+    } else {
+      return false;
     }
   }
 
