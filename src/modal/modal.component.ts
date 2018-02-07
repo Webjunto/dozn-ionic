@@ -8,7 +8,6 @@ import { DoznService } from '../dozn.service';
   <ion-content>
     <h1>Welcome to</h1>
     <h2>Dozn</h2>
-    <h4>Intro text</h4>
     <form>
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT USER" type="user"></auto-complete>
       <auto-complete (create)="onCreate($event)" (autocompleteSelected)="onSelect($event)" label="SELECT FEATURE" type="feature"></auto-complete>

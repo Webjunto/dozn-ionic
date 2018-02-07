@@ -10,7 +10,10 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
 import { DOZN_CONFIG, IDoznConfig } from './utils';
-import { environment } from './environments/environment';
+
+import { environment as dev} from './environments/environment.dev';
+import { environment as qa} from './environments/environment.qa';
+import { environment as pro} from './environments/environment';
 
 declare var require: any;
 const { version: appVersion } = require('../../../../package.json');
@@ -18,6 +21,7 @@ const { version: appVersion } = require('../../../../package.json');
 @Injectable()
 export class DoznService {
   private session;
+  public environment;
 
   public doznEvents = new Subject();
   public currentViewName: string;
@@ -32,6 +36,14 @@ export class DoznService {
     @Inject(DOZN_CONFIG) config: IDoznConfig
   ) {
 
+    if (config.env && config.env === 'dev') {
+      this.environment = dev;
+    } else if (config.env && config.env === 'qa') {
+      this.environment = qa;
+    } else {
+      this.environment = pro;
+    }
+
     this.apiKey = config.apiKey;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
@@ -41,21 +53,21 @@ export class DoznService {
     this.doznEvents.asObservable()
     .subscribe(event => {
       const payload: any = this.prepareEvtData(event);
-      this.http.post(environment.firebase.POST_ACTION, payload).subscribe(data => {
+      this.http.post(this.environment.firebase.POST_ACTION, payload).subscribe(data => {
         console.log('saved event:', data);
       });
     });
   }
 
   createFeature(name) {
-    return this.http.post(environment.firebase.POST_FEATURE, {
+    return this.http.post(this.environment.firebase.POST_FEATURE, {
       name,
       projectId: this.apiKey
     });
   }
 
   createFlow(name, featureId) {
-    return this.http.post(environment.firebase.POST_FLOW, {
+    return this.http.post(this.environment.firebase.POST_FLOW, {
       name,
       projectId: this.apiKey,
       featureId,
@@ -77,7 +89,7 @@ export class DoznService {
       updatedAt: new Date()
     };
 
-    const session = await this.http.post(environment.firebase.POST_SESSION, this.session).toPromise();
+    const session = await this.http.post(this.environment.firebase.POST_SESSION, this.session).toPromise();
     this.sessionId = session.text();
   }
 
