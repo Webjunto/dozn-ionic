@@ -14,10 +14,11 @@ import 'rxjs/add/operator/map';
       <input type="text" [(ngModel)]="name" formControlName="name" placeholder="{{placeholder}}" class="input" (input)="onType($event.target.value)">
 
       <div *ngIf="autocompleteForm.controls.name.errors?.maxlength?.requiredLength">
-        Not valid, must be at max {{autocompleteForm.controls.name.errors.maxlength.requiredLength}} characters long.
+      <p>Not valid, must be at max</p>
+      <p>{{autocompleteForm.controls.name.errors.maxlength.requiredLength}} characters long</p>
       </div>
       <div *ngIf="autocompleteForm.controls.name.hasError('required') && autocompleteForm.controls.name.touched">
-        This name cannot be empty.
+      <p>This name can't be empty</p>
       </div>
 
       <div *ngIf="name.length > 0 && !selected">
@@ -32,7 +33,7 @@ import 'rxjs/add/operator/map';
                   !autocompleteForm.controls.name.errors?.maxlength?.requiredLength &&
                   !autocompleteForm.controls.name.hasError('required')"
             (click)="onCreateOption(name)">
-          <p>Create {{name}} {{type}}</p>
+          <p>Create {{ (name.length>9)? (name | slice:0:8)+'...':(name) }} {{type}}</p>
       </div>
     </form>
   </div>
@@ -51,7 +52,6 @@ import 'rxjs/add/operator/map';
       font-size: 14px;
       background-color: #934db6;
       padding: 8.5px;
-      width: 100%;
 
       &::-webkit-input-placeholder { color: white; opacity: 0.6; }
       &::-moz-placeholder { color: white; opacity: 0.6; }
@@ -89,17 +89,19 @@ export class AutocompleteComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const items = await this.http.get(this.getCloudFunctionUrl()).toPromise();
-    this.items = items.json();
+    if (this._dozn.apiKey) {
+      const items = await this.http.get(this.getCloudFunctionUrl(this.type, this._dozn.apiKey)).toPromise();
+      this.items = items.json();
+    }
   }
 
-  getCloudFunctionUrl() {
-    if (this.type === 'user') {
-      return this._dozn.environment.firebase.GET_COMPANY_USERS + this._dozn.apiKey;
-    } else if (this.type === 'feature'){
-      return this._dozn.environment.firebase.GET_FEATURES + this._dozn.apiKey;
+  getCloudFunctionUrl(type, apiKey) {
+    if (type === 'user') {
+      return this._dozn.environment.firebase.GET_COMPANY_USERS + apiKey;
+    } else if (type === 'feature'){
+      return this._dozn.environment.firebase.GET_FEATURES + apiKey;
     } else {
-      return this._dozn.environment.firebase.GET_FLOWS + this._dozn.apiKey;
+      return this._dozn.environment.firebase.GET_FLOWS + apiKey;
     }
   }
 
