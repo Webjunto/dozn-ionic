@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
 import { DoznService } from '../dozn.service';
+import { DoznIonic } from '../models/models';
 
 @Component({
   selector: 'dozn-modal',
@@ -57,7 +58,7 @@ import { DoznService } from '../dozn.service';
   ]
 })
 export class DoznModalComponent {
-  data = {
+  sessionData: DoznIonic.SessionOptions = {
     user: '',
     feature: '',
     flow: ''
@@ -68,24 +69,24 @@ export class DoznModalComponent {
     private _dozn: DoznService
   ) { }
 
-  onSelect(event) {
-    this.data[event.type] = event.item.id;
+  onSelect(event: DoznIonic.SelectOption) {
+    this.sessionData[event.type] = event.id;
   }
 
-  async onCreate(event) {
+  async onCreate(event: DoznIonic.CreateOption) {
     if (event.type === 'feature') {
       const feature = await this._dozn.createFeature(event.name).toPromise();
-      this.data[event.type] = feature.text();
+      this.sessionData[event.type] = feature.text();
     } else if (event.type === 'flow') {
-      const flow = await this._dozn.createFlow(event.name, this.data.feature).toPromise();
-      this.data[event.type] = flow.text();
+      const flow = await this._dozn.createFlow(event.name, this.sessionData.feature).toPromise();
+      this.sessionData[event.type] = flow.text();
     } else {
       return;
     }
   }
 
   isDisabledBeginSession() {
-    if(this.data.feature === '' || this.data.flow === '' || this.data.user === '') {
+    if(this.sessionData.feature === '' || this.sessionData.flow === '' || this.sessionData.user === '') {
       return true;
     } else {
       return false;
@@ -93,8 +94,8 @@ export class DoznModalComponent {
   }
 
   onSubmit() {
-    if (this.data.user && this.data.feature && this.data.flow) {
-      this._dozn.startSession(this.data.user, this.data.feature, this.data.flow);
+    if (this.sessionData.user && this.sessionData.feature && this.sessionData.flow) {
+      this._dozn.startSession(this.sessionData.user, this.sessionData.feature, this.sessionData.flow);
       this._viewCtrl.dismiss();
     }
   }
