@@ -44,7 +44,7 @@ export class DoznService {
       this.environment = pro;
     }
 
-    this.checkValidApikey(config.apiKey);
+    this.apiKey = config.apiKey;
 
     app.viewDidEnter.subscribe((viewCtrl: ViewController) => {
       this.currentViewName = viewCtrl.name;
@@ -57,16 +57,6 @@ export class DoznService {
         console.log('saved event:', data);
       });
     });
-  }
-
-  async checkValidApikey(apikey) {
-    let response;
-    try {
-      response = await this.http.get(this.environment.firebase.GET_COMPANY_USERS + apikey).toPromise();
-      this.apiKey = apikey;
-    } catch (error) {
-      throw "Invalid API KEY";
-    }
   }
 
   createFeature(name) {

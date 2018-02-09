@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
   <div>
     <form [formGroup]="autocompleteForm">
       <label>{{label}}</label>
-      <input type="text" [(ngModel)]="name" formControlName="name" placeholder="{{placeholder}}" class="input" (input)="onType($event.target.value)">
+      <input type="text" [(ngModel)]="name" formControlName="name" placeholder="What {{type}} do you want?" class="input" (input)="onType($event.target.value)">
 
       <div *ngIf="autocompleteForm.controls.name.errors?.maxlength?.requiredLength">
       <p>Not valid, must be at max</p>
@@ -72,10 +72,8 @@ export class AutocompleteComponent implements OnInit {
   items: Array<DoznIonic.ItemOption> = [];
   selected: boolean = false;
   name: string = '';
-  placeholder: string = '';
-
+  
   constructor(private http: Http, private _dozn: DoznService, formBuilder: FormBuilder) {
-    this.placeholder = 'What ' + this.type + ' do you want?';
     this.isUserSelect = this.type === 'user' ? true : false;
     this.autocompleteForm = formBuilder.group({
       'name': [
@@ -90,8 +88,12 @@ export class AutocompleteComponent implements OnInit {
 
   async ngOnInit() {
     if (this._dozn.apiKey) {
-      const items = await this.http.get(this.getCloudFunctionUrl(this.type, this._dozn.apiKey)).toPromise();
-      this.items = items.json();
+      try {
+        const items = await this.http.get(this.getCloudFunctionUrl(this.type, this._dozn.apiKey)).toPromise();
+        this.items = items.json();
+      } catch (error) {
+        throw error._body;
+      }
     }
   }
 
