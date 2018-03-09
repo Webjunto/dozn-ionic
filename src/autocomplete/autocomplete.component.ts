@@ -72,7 +72,7 @@ export class AutocompleteComponent implements OnInit {
   items: Array<DoznIonic.ItemOption> = [];
   selected: boolean = false;
   name: string = '';
-  
+
   constructor(private http: Http, private _dozn: DoznService, formBuilder: FormBuilder) {
     this.isUserSelect = this.type === 'user' ? true : false;
     this.autocompleteForm = formBuilder.group({
@@ -108,11 +108,9 @@ export class AutocompleteComponent implements OnInit {
   }
 
   onType(value: string) {
-    if (this.selected) {
-      this.selected = false;
-      const item = {name: '', id:'', type: this.type};
-      this.autocompleteSelected.emit(item);
-    }
+    this.selected = false;
+    const item = {name: value, id:'', type: this.type};
+    this.autocompleteSelected.emit(item);
   }
 
   onCreateOption(name: string) {
